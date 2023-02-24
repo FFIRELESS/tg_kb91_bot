@@ -1,31 +1,35 @@
 const TelegramBot = require('node-telegram-bot-api');
-const {botApiToken, apiUrl} = require("./config/config");
+const config = require("./config/config");
 const axios = require("./config/axios");
-const formatter = require("./utils/jsonFormatter");
+const jsonFormatter = require("./utils/jsonFormatter");
+const { getDateNow, getDateTomorrow} = require("./utils/getDate");
 
-const getSchedule = async () => {
-    return await axios.get(`${apiUrl}method=getSchedules&id_grp=1002071&id_fio=0&id_aud=0&date_beg=24.02.2023&date_end=24.02.2023`);
+const getSchedule = async (dateNow) => {
+    return await axios.get(`${config.apiUrl}method=getSchedules&id_grp=1002071&id_fio=0&id_aud=0&date_beg=${dateNow}&date_end=${dateNow}`);
 }
 
-// Создаем объект бота
-const bot = new TelegramBot(botApiToken, {polling: true});
+const bot = new TelegramBot(config.botApiToken, { polling: true });
 
-// Обработчик команды /start
 bot.onText(/\/start/, (msg) => {
-    bot.sendMessage(msg.chat.id, 'Привет! Я могу показать тебе погоду в любом городе. Просто отправь мне название города.');
+    bot.sendMessage(msg.chat.id, `Хей\u{1F44B}.\nЯ - бот, що допоможе тобі швидко виводити розклад пар, на які ти не ходиш))) \nДля того, щоб вивести розклад на сьогодні, введи /today.`);
 });
 
 bot.onText(/\/today/, async (msg) => {
-    await getSchedule().then((schedule) => {
-        const message = formatter(schedule.data);
-        console.log(formatter(schedule.data))
-        bot.sendMessage(msg.chat.id, message, { parse_mode: 'markdown' })
+    const date = getDateNow();
+    await getSchedule(date).then((schedule) => {
+        const message = jsonFormatter(schedule.data);
+        bot.sendMessage(msg.chat.id, message, { parse_mode: "HTML" })
     });
 });
 
-// // Обработчик сообщений от пользователя
+bot.onText(/\/tomorrow/, async (msg) => {
+    const date = getDateTomorrow();
+    await getSchedule(date).then((schedule) => {
+        const message = jsonFormatter(schedule.data);
+        bot.sendMessage(msg.chat.id, message)
+    });
+});
+
 // bot.on('message', (msg) => {
-//     const chatId = msg.chat.id;
-//     const city = msg.text;
-//     getWeather(city, chatId);
+//     bot.sendMessage(msg.chat.id, "Не намагайся мені щось писати, поговори краще з https://chat.openai.com/chat");
 // });
