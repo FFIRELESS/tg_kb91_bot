@@ -6,5 +6,5 @@ export const getSchedule = async (dateNow) => {
 }
 
 export const getWeather = async (msg) => {
-    return await apiClient.get(`https://openweathermap.org/data/2.5/weather?lat=${msg.message.location.latitude}&lon=${msg.message.location.longitude}&appid=${config.weatherToken}`)
+    return await apiClient.get(`https://api.openweathermap.org/data/2.5/weather?units=metric&lang=ua&lat=${msg.message.location.latitude}&lon=${msg.message.location.longitude}&appid=${config.weatherToken}`)
 }
