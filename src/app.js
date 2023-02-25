@@ -1,75 +1,37 @@
 import express from "express";
 import {Telegraf} from "telegraf";
-import config from './config/config.js';
-import jsonFormatter from "./utils/jsonFormatter.js";
-import {getDateNow, getDatesWeek, getDateTomorrow} from "./utils/getDate.js";
-import {getSchedule} from "./controller/crud.js";
-import {getMainMenu, weekMenu} from "./keyboards.js";
+import config from './config/app.config.js';
+import {getDatesWeek} from "./utils/getDate.js";
+import controller from "./controller/controller.js";
 
 const app = express();
 const bot = new Telegraf(config.botApiToken);
 
 const datesWeek = getDatesWeek()
 
-bot.start((msg) => {
-    msg.reply(`Хей\u{1F44B}.\nЯ - бот, що допоможе тобі швидко виводити`
-        + ` розклад пар, на які ти не ходиш))) \nСкористайся меню для взаємодії з ботом \u{1F31A}`, getMainMenu());
+bot.start(controller.startAlert);
+bot.command('info', controller.botInfo)
+bot.command('today', controller.scheduleToday)
+bot.command('tomorrow', controller.scheduleTomorrow)
+
+bot.hears("Розклад на сьогодні", controller.scheduleToday);
+bot.hears("Розклад на завтра", controller.scheduleTomorrow);
+bot.hears("\u{1F4C5} Розклад на 10 днів", async msg => {
+    await controller.scheduleWeek(msg, datesWeek);
 });
+bot.hears("\u{26C5} Погода", controller.getLocation);
+bot.hears(/(!img\s).*/, controller.generateImage);
+bot.hears(/(!gpt\s).*/, controller.generateText);
+bot.hears(/(?!\/).*/, controller.anyMessage);
 
-bot.command('info', msg => {
-    msg.reply("Цього бота створено для облегшення й так тяжкого життя групи"
-        + " КБ-91 \"Кібербезполєзнікі\".\n\nАвтор: @lfistr");
-})
-
-bot.command('today', async msg => {
-    const date = getDateNow();
-    await getSchedule(date).then((schedule) => {
-        const message = jsonFormatter(schedule.data);
-        msg.reply(message, {parse_mode: "HTML"})
-    });
-})
-
-bot.command('tomorrow', async msg => {
-    const date = getDateTomorrow();
-    await getSchedule(date).then((schedule) => {
-        const message = jsonFormatter(schedule.data);
-        msg.reply(message)
-    });
-})
-bot.hears("Розклад на сьогодні", async msg => {
-    const date = getDateNow();
-    await getSchedule(date).then((schedule) => {
-        const message = jsonFormatter(schedule.data);
-        msg.reply(message, {parse_mode: "HTML"})
-    });
-});
-
-bot.hears("Розклад на завтра", async msg => {
-    const date = getDateTomorrow();
-    await getSchedule(date).then((schedule) => {
-        const message = jsonFormatter(schedule.data);
-        msg.reply(message)
-    });
-});
-
-bot.hears("\u{1F4C5} Розклад на 10 днів", msg => {
-    msg.reply("Оберіть дату:", weekMenu(datesWeek));
-});
-
-bot.hears(/(?!\/).*/, msg => {
-    msg.reply("Хочеш поговорити? \u{1F601}\nПиши @lfistr або йому: https://chat.openai.com/chat");
-});
+bot.on('location', controller.sendWeather);
 
 bot.action(datesWeek, async msg => {
-    for (const datesWeekElement of datesWeek) {
-        if (msg.callbackQuery.data === datesWeekElement) {
-            await getSchedule(datesWeekElement).then((schedule) => {
-                const message = jsonFormatter(schedule.data);
-                msg.reply(message, {parse_mode: "HTML"})
-            });
-        }
-    }
-})
+    await controller.scheduleWeekActions(msg, datesWeek);
+});
 
-bot.launch()
-app.listen(3002)
+bot.launch().then(() => {
+});
+app.listen(config.appPort, () => {
+    console.log(`App started at port: ${config.appPort}`)
+});
