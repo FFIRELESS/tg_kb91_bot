@@ -34,16 +34,12 @@ export const controller = {
         const date = getDateTomorrow();
         await getSchedule(date).then(async (schedule) => {
             const message = jsonFormatter(schedule.data);
-            await msg.reply(message)
+            await msg.replyWithHTML(message)
         });
     },
 
     scheduleWeek: async (msg, datesWeek) => {
         await msg.reply("Оберіть дату:", weekMenu(datesWeek));
-    },
-
-    anyMessage: async (msg) => {
-        await msg.reply("Хочеш поговорити? \u{1F601}\nПиши @lfistr або йому: https://chat.openai.com/chat");
     },
 
     scheduleWeekActions: async (msg, datesWeek) => {

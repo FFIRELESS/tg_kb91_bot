@@ -5,7 +5,7 @@ import {getDatesWeek} from "./utils/getDate.js";
 import controller from "./controller/controller.js";
 
 const app = express();
-const bot = new Telegraf(config.botApiToken);
+const bot = new Telegraf(config.botApiToken, {handlerTimeout: 9_000_000});
 
 const datesWeek = getDatesWeek()
 
@@ -22,7 +22,6 @@ bot.hears("\u{1F4C5} Розклад на 10 днів", async msg => {
 bot.hears("\u{26C5} Погода", controller.getLocation);
 bot.hears(/(!img\s).*/, controller.generateImage);
 bot.hears(/(!gpt\s).*/, controller.generateText);
-bot.hears(/(?!\/).*/, controller.anyMessage);
 
 bot.on('location', controller.sendWeather);
 
