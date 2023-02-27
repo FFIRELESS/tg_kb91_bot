@@ -8,11 +8,20 @@ import textController from "./controller/textController.js";
 import weatherController from "./controller/weatherController.js";
 import openAIController from "./controller/openAIController.js";
 import {extrasController} from "./controller/extrasController.js";
+import bodyParser from "body-parser";
+import errorHandler from "./utils/errorHandler.js";
+import routes from "./routes/routes.js";
 
 const app = express();
 const bot = new Telegraf(config.botApiToken, {handlerTimeout: 9_000_000});
 
 const datesWeek = getDatesWeek()
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.use(errorHandler);
+app.use("/", routes);
 
 bot.start(textController.startAlert);
 bot.command('info', textController.botInfo)
