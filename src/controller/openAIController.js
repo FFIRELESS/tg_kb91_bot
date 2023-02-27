@@ -40,7 +40,7 @@ export const openAIController = {
             });
             await msg.reply(response.data.choices[0].text);
             await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{2705} Готово!');
-            logger.info(`Generating image success`);
+            logger.info(`Generating text success`);
         } catch (error) {
             logger.error(`OpenAI GPT-3 error: ${error.response?.data?.error?.message}`);
             await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{1F6AB} Провал');
