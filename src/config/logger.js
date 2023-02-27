@@ -1,6 +1,6 @@
 import {createLogger, format, transports} from 'winston';
-// import PostgresTransport from 'winston-postgres-transport';
-// import config from "./app.config.js";
+import PostgresTransport from 'winston-postgres-transport';
+import config from "./app.config.js";
 
 export const logger = createLogger({
     transports: [
@@ -13,12 +13,11 @@ export const logger = createLogger({
             )
         }),
 
-        //TODO: possible performance reducing because of:
-        // new PostgresTransport({
-        //     level: 'info',
-        //     postgresUrl: config.dbUrl,
-        //     tableName: 'logs'
-        // })
+        //TODO: working unexpectedly:
+        new PostgresTransport({
+            postgresUrl: config.dbUrl,
+            tableName: 'logs'
+        })
     ]
 });
 

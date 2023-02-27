@@ -10,7 +10,8 @@ export const config = {
     apiUrl: process.env.API_URL,
     openAiToken: process.env.OPENAI_TOKEN,
     weatherToken: process.env.WEATHER_TOKEN,
-    groupId: process.env.GROUP_ID
+    groupId: process.env.GROUP_ID,
+    salt: process.env.SALT
 }
 
 export default config;

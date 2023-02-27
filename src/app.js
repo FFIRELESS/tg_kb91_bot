@@ -1,16 +1,18 @@
 import express from "express";
+import bodyParser from "body-parser";
 import {Telegraf} from "telegraf";
+
+import routes from "./routes/routes.js";
+import logger from "./config/logger.js";
 import config from './config/app.config.js';
 import {getDatesWeek} from "./utils/getDate.js";
+import errorHandler from "./utils/errorHandler.js";
+
 import scheduleController from "./controller/scheduleController.js";
-import logger from "./config/logger.js";
 import textController from "./controller/textController.js";
 import weatherController from "./controller/weatherController.js";
 import openAIController from "./controller/openAIController.js";
-import {extrasController} from "./controller/extrasController.js";
-import bodyParser from "body-parser";
-import errorHandler from "./utils/errorHandler.js";
-import routes from "./routes/routes.js";
+import extrasController from "./controller/extrasController.js";
 
 const app = express();
 const bot = new Telegraf(config.botApiToken, {handlerTimeout: 9_000_000});
