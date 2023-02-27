@@ -3,7 +3,7 @@ import logger from "../config/logger.js";
 
 export const openAIController = {
     generateImage: async (msg) => {
-        logger.info(`OpenAI: @${msg.chat?.username} id=${msg.chat?.id} initiated generating image`);
+        logger.info(`OpenAI DALL-E-2: @${msg.chat?.username} id=${msg.chat?.id} initiated generating image`);
 
         const text = msg.message.text.substring(5, msg.message.text.length);
         const {message_id} = await msg.reply('\u{1F553} Генерація зображення...');
@@ -17,13 +17,7 @@ export const openAIController = {
             await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{2705} Готово!');
             logger.info(`Generating image success`);
         } catch (error) {
-            if (error.response) {
-                console.log(error.response.status);
-                console.log(error.response.data);
-            } else {
-                console.log(error.message);
-            }
-            logger.error(`OpenAI image error: ${error.response?.data?.error?.message}`);
+            logger.error(`OpenAI DALL-E-2 error: ${error.response?.data?.error?.message}`);
             await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{1F6AB} Провал');
             await msg.reply(`\u{2757} Помилка API OpenAI: ${error.response?.data?.error?.message}`)
         }
@@ -48,12 +42,6 @@ export const openAIController = {
             await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{2705} Готово!');
             logger.info(`Generating image success`);
         } catch (error) {
-            if (error.response) {
-                console.log(error.response.status);
-                console.log(error.response.data);
-            } else {
-                console.log(error.message);
-            }
             logger.error(`OpenAI GPT-3 error: ${error.response?.data?.error?.message}`);
             await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{1F6AB} Провал');
             await msg.reply(`\u{2757} Помилка API OpenAI: ${error.response?.data?.error?.message}`)
