@@ -65,15 +65,15 @@ export const scheduleController = {
 
     addHomework: async (msg) => {
         logger.info(`@${msg.chat?.username} id=${msg.chat?.id} requested adding homework`)
-        const query = msg.message.text.substring(8, msg.message.text.length);
-        const fieldValueArray = query.split('&');
-        let data = {
-            discipline: fieldValueArray[0].split("=")[1],
-            homework: fieldValueArray[1].split("=")[1],
-            deadline: fieldValueArray[2].split("=")[1],
-        };
-
         try {
+            const query = msg.message.text.substring(8, msg.message.text.length);
+            const fieldValueArray = query.split('&&');
+            let data = {
+                discipline: fieldValueArray[0].split("==")[1],
+                homework: fieldValueArray[1].split("==")[1],
+                deadline: fieldValueArray[2].split("==")[1],
+            };
+
             await tableHomework.create(data).then(async () => {
                 await msg.reply("\u{2705} ДЗ додано!");
                 logger.info('Success adding homework');
@@ -101,14 +101,15 @@ export const scheduleController = {
 
     addLink: async (msg) => {
         logger.info(`@${msg.chat?.username} id=${msg.chat?.id} requested adding discipline link`)
-        const query = msg.message.text.substring(9, msg.message.text.length);
-        const fieldValueArray = query.split('&');
-        let data = {
-            discipline: fieldValueArray[0].split("=")[1],
-            link: fieldValueArray[1].split("=")[1],
-        };
 
         try {
+            const query = msg.message.text.substring(9, msg.message.text.length);
+            const fieldValueArray = query.split('&&');
+            let data = {
+                discipline: fieldValueArray[0].split("==")[1],
+                link: fieldValueArray[1].split("==")[1],
+            };
+
             await tableLinks.create(data).then(async () => {
                 await msg.reply("\u{2705} Посилання додано!");
                 logger.info('Success discipline link');
