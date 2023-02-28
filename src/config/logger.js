@@ -1,7 +1,9 @@
 import {createLogger, format, transports} from 'winston';
+import PostgresTransport from 'winston-postgres-transport';
+import config from "./app.config.js";
 
 export const logger = createLogger({
-    transports:
+    transports: [
         new transports.File({
             filename: 'bot.log',
             format: format.combine(
@@ -10,6 +12,13 @@ export const logger = createLogger({
                 format.printf(info => `${info.level}: ${[info.timestamp]}: ${info.message}`),
             )
         }),
+
+        //TODO: working unexpectedly:
+        new PostgresTransport({
+            postgresUrl: config.dbUrl,
+            tableName: 'logs'
+        })
+    ]
 });
 
 export default logger;
