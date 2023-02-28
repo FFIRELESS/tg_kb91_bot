@@ -4,7 +4,8 @@ import {getWeekDay} from "./utils/getDate.js";
 export function getMainMenu() {
     return Markup.keyboard([
         ['Розклад на сьогодні', 'Розклад на завтра'],
-        ['\u{1F4C5} Розклад на 10 днів'], ['\u{26C5} Погода']
+        ['\u{1F4C5} Розклад на 10 днів'], ["\u{1F4D6} Домашка"],
+        ["\u{1F517} Посилання на пари"], ['\u{26C5} Погода'],
     ], {columns: 3}).resize()
 }
 
