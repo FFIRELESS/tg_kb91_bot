@@ -67,11 +67,11 @@ export const scheduleController = {
         logger.info(`@${msg.chat?.username} id=${msg.chat?.id} requested adding homework`)
         try {
             const query = msg.message.text.substring(8, msg.message.text.length);
-            const fieldValueArray = query.split('&&');
+            const fieldValueArray = query.split('; ');
             let data = {
-                discipline: fieldValueArray[0].split("==")[1],
-                homework: fieldValueArray[1].split("==")[1],
-                deadline: fieldValueArray[2].split("==")[1],
+                discipline: fieldValueArray[0],
+                homework: fieldValueArray[1],
+                deadline: fieldValueArray[2],
             };
 
             await tableHomework.create(data).then(async () => {
@@ -104,19 +104,19 @@ export const scheduleController = {
 
         try {
             const query = msg.message.text.substring(9, msg.message.text.length);
-            const fieldValueArray = query.split('&&');
+            const fieldValueArray = query.split('; ');
             let data = {
-                discipline: fieldValueArray[0].split("==")[1],
-                link: fieldValueArray[1].split("==")[1],
+                discipline: fieldValueArray[0],
+                link: fieldValueArray[1],
             };
 
             await tableLinks.create(data).then(async () => {
                 await msg.reply("\u{2705} Посилання додано!");
-                logger.info('Success discipline link');
+                logger.info('Success adding discipline link');
             });
         } catch (error) {
             await msg.reply('\u{2757}Помилка бази даних')
-            logger.info('Failed discipline link');
+            logger.info('Failed adding discipline link');
         }
     },
 
@@ -127,12 +127,12 @@ export const scheduleController = {
             await tableLinks.getAll().then(async (links) => {
                 const message = JsonFormatter(links, "links");
                 await msg.replyWithHTML(message);
-                logger.info('Success discipline links');
+                logger.info('Success showing discipline links');
             });
         } catch (error) {
             console.log(error)
             await msg.reply('\u{2757}Помилка бази даних')
-            logger.info('Failed discipline links');
+            logger.info('Failed showing discipline links');
         }
     },
 }

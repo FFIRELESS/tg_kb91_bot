@@ -29,7 +29,7 @@ export const jsonFormatter = (json, type) => {
         case "homework":
             if (json.length !== 0) {
                 for (const messageElement of json) {
-                    message += `<strong><u>\u{1F4CC} ${messageElement.discipline === '' ? "Інфи немає :(" : messageElement.discipline}</u></strong>\n`
+                    message += `\u{1F4CC} <strong><u>${messageElement.discipline === '' ? "Інфи немає :(" : messageElement.discipline}</u></strong>\n`
                     message += `\u{1F551} до: <strong>${messageElement.deadline === '' ? "Інфи немає :(" : messageElement.deadline}</strong>\n`;
                     message += `\u{1F4D6} ${messageElement.homework === '' ? "Інфи немає :(" : messageElement.homework}\n`;
                     message += "\n";
@@ -41,7 +41,7 @@ export const jsonFormatter = (json, type) => {
         case "links":
             if (json.length !== 0) {
                 for (const messageElement of json) {
-                    message += `<strong><u>\u{1F4CC} ${messageElement.discipline === '' ? "Інфи немає :(" : messageElement.discipline}:</u></strong>\n`
+                    message += `\u{1F4CC} <strong><u>${messageElement.discipline === '' ? "Інфи немає :(" : messageElement.discipline}:</u></strong>\n`
                     message += `\u{1F517} ${messageElement.link === '' ? "Інфи немає :(" : messageElement.link}\n`;
                     message += "\n";
                 }

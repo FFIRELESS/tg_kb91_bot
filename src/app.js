@@ -26,11 +26,11 @@ app.use(errorHandler);
 app.use("/", routes);
 
 bot.start(textController.startAlert);
-bot.command('info', textController.botInfo)
-bot.command('today', scheduleController.scheduleToday)
-bot.command('tomorrow', scheduleController.scheduleTomorrow)
-bot.command('homework', scheduleController.getHomework)
-bot.command('links', scheduleController.getLinks)
+bot.command('info', textController.botInfo);
+bot.command('today', scheduleController.scheduleToday);
+bot.command('tomorrow', scheduleController.scheduleTomorrow);
+bot.command('homework', scheduleController.getHomework);
+bot.command('links', scheduleController.getLinks);
 
 bot.hears("Розклад на сьогодні", scheduleController.scheduleToday);
 bot.hears("Розклад на завтра", scheduleController.scheduleTomorrow);
