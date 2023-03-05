@@ -49,6 +49,20 @@ export const jsonFormatter = (json, type) => {
                 message += `\u{2757}Посилань немає.`;
             }
             break;
+        case "feedback":
+            if (json.length !== 0) {
+                for (const messageElement of json) {
+                    message += `\u{1F4C5} ${messageElement.timestamp.toLocaleString() === '' ? "Інфи немає :(" :
+                        messageElement.timestamp.toLocaleString()}\n`
+                    message += `\u{1F6B6} ${messageElement.username === '' ? "Інфи немає :(" : messageElement.username}\n`;
+                    message += `\u{1F522} ${messageElement.userId === '' ? "Інфи немає :(" : messageElement.userId}\n`;
+                    message += `\u{1F4D6} ${messageElement.message === '' ? "Інфи немає :(" : messageElement.message}\n`;
+                    message += "\n";
+                }
+            } else {
+                message += `\u{2757}Посилань немає.`;
+            }
+            break;
         default:
             message = "Невірний тип форматування";
     }

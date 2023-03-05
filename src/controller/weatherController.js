@@ -4,7 +4,7 @@ import logger from "../config/logger.js";
 
 export const weatherController = {
     getLocation: async (msg) => {
-        await msg.reply('\u{1F4CD} Надішли геолокацію, в якій хочеш дізнатися погоду');
+        await msg.reply('\u{1F4CD} Надішли геолокацію, в якій хочеш дізнатися погоду (не текстом!)');
     },
 
     sendWeather: async (msg) => {
