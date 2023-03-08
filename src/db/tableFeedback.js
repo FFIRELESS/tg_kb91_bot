@@ -7,7 +7,11 @@ export const tableFeedback = {
 
     getAll: async () => {
         return db.select().from("feedback");
-    }
+    },
+
+    truncateTable: async () => {
+        return db("feedback").truncate();
+    },
 }
 
 export default tableFeedback;

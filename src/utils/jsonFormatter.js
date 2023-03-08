@@ -60,7 +60,7 @@ export const jsonFormatter = (json, type) => {
                     message += "\n";
                 }
             } else {
-                message += `\u{2757}Посилань немає.`;
+                message += `\u{2757}Відгуків немає.`;
             }
             break;
         default:
