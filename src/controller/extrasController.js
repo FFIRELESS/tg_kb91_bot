@@ -33,6 +33,20 @@ export const extrasController = {
             logger.info('Failed showing feedback');
         }
     },
+
+    truncateFeedback: async (msg) => {
+        logger.info(`@${msg.chat?.username} id=${msg.chat?.id} requested truncating feedback table`)
+
+        try {
+            await tableFeedback.truncateTable().then(async () => {
+                await msg.replyWithHTML("\u{2705} Успіх очищення таблиці відгуків");
+                logger.info('Success truncating feedback table');
+            });
+        } catch (error) {
+            await msg.reply('\u{2757}Помилка бази даних')
+            logger.info('Failed truncating feedback table');
+        }
+    },
 }
 
 export default extrasController;

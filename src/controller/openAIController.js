@@ -32,6 +32,7 @@ export const openAIController = {
             const response = await openai.createCompletion({
                 model: "text-davinci-003",
                 prompt: text,
+                user: msg.chat?.first_name,
                 max_tokens: 1000,
                 temperature: 0,
                 top_p: 1,
@@ -43,6 +44,30 @@ export const openAIController = {
             logger.info(`Generating text success`);
         } catch (error) {
             logger.error(`OpenAI GPT-3 error: ${error.response?.data?.error?.message}`);
+            await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{1F6AB} Провал');
+            await msg.reply(`\u{2757} Помилка API OpenAI: ${error.response?.data?.error?.message}`)
+        }
+    },
+
+    generateTextTurbo: async (msg) => {
+        logger.info(`OpenAI GPT-3.5 Turbo: @${msg.chat?.username} id=${msg.chat?.id} initiated generating text`);
+
+        const text = msg.message.text.substring(5, msg.message.text.length);
+        const {message_id} = await msg.reply('\u{1F553} Генерація відповіді...');
+        try {
+            const response = await openai.createChatCompletion({
+                model: "gpt-3.5-turbo",
+                messages: [{role: "user", content: text}],
+                temperature: 0,
+                n: 1,
+                stop: "\0",
+            });
+            await msg.reply(response.data.choices[0].message.content);
+            await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{2705} Готово!');
+            logger.info(`Generating text success`);
+        } catch (error) {
+            console.log(error)
+            logger.error(`OpenAI GPT-3.5 Turbo error: ${error.response?.data?.error?.message}`);
             await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{1F6AB} Провал');
             await msg.reply(`\u{2757} Помилка API OpenAI: ${error.response?.data?.error?.message}`)
         }
