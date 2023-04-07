@@ -40,6 +40,7 @@ bot.hears("\u{26C5} Погода", weatherController.getLocation);
 bot.hears(/(!img\s).*/, openAIController.generateImage);
 bot.hears(/(!gpt\s).*/, openAIController.generateText);
 bot.hears(/(!gpt3\s).*/, openAIController.generateTextTurbo);
+bot.hears(/(!gpt4\s).*/, openAIController.generateTextTurboPlus);
 bot.hears(/(!feedback\s).*/, extrasController.sendFeedback);
 
 bot.hears(/(!!addhw\s).*/, scheduleController.addHomework);
