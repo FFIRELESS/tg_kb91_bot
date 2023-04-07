@@ -71,6 +71,30 @@ export const openAIController = {
             await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{1F6AB} Провал');
             await msg.reply(`\u{2757} Помилка API OpenAI: ${error.response?.data?.error?.message}`)
         }
+    },
+
+    generateTextTurboPlus: async (msg) => {
+        logger.info(`OpenAI GPT-4: @${msg.chat?.username} id=${msg.chat?.id} initiated generating text`);
+
+        const text = msg.message.text.substring(5, msg.message.text.length);
+        const {message_id} = await msg.reply('\u{1F553} Генерація відповіді...');
+        try {
+            const response = await openai.createChatCompletion({
+                model: "gpt-4",
+                messages: [{role: "user", content: text}],
+                temperature: 0,
+                n: 1,
+                stop: "\0",
+            });
+            await msg.reply(response.data.choices[0].message.content);
+            await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{2705} Готово!');
+            logger.info(`Generating text success`);
+        } catch (error) {
+            console.log(error)
+            logger.error(`OpenAI GPT-4 error: ${error.response?.data?.error?.message}`);
+            await msg.telegram.editMessageText(msg.chat.id, message_id, 0, '\u{1F6AB} Провал');
+            await msg.reply(`\u{2757} Помилка API OpenAI: ${error.response?.data?.error?.message}`)
+        }
     }
 }
 
